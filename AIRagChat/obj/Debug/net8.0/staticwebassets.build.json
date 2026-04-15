@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "pmsufjmBZtxrW76p9j55U1SI3zPWK0e7wGxv4cKaqCE=",
+  "Source": "AIRagChat",
+  "BasePath": "_content/AIRagChat",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "ContainingType": "AIRagChat.Controllers.AiController",
+    "Method": "Chat",
+    "RelativePath": "api/ai/v1/chat",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "AIRagChat.Models.ChatRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AIRagChat.Controllers.AiController",
+    "Method": "Ingest",
+    "RelativePath": "api/ai/v1/ingest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "text",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AIRagChat.Controllers.PromptLogController",
+    "Method": "Get",
+    "RelativePath": "api/ai/v1/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

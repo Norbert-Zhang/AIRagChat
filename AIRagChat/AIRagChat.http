@@ -1,0 +1,6 @@
+@AIRagChat_HostAddress = http://localhost:5288
+
+GET {{AIRagChat_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
