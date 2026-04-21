@@ -55,5 +55,39 @@ namespace AIRagChat.Services
             }
             return response;
         }
+
+        public async IAsyncEnumerable<string> ChatStreamAsync(string userId, List<Message> messages)
+        {
+            var history = new ChatHistory();
+            // 👉 把你的Message转换成SK格式
+            foreach (var msg in messages)
+            {
+                switch (msg.Role.ToLower())
+                {
+                    case "system":
+                        history.AddSystemMessage(msg.Content);
+                        break;
+
+                    case "user":
+                        history.AddUserMessage(msg.Content);
+                        break;
+
+                    case "assistant":
+                        history.AddAssistantMessage(msg.Content);
+                        break;
+                }
+            }
+            _logger.LogInformation("Streaming started");
+            // ⭐ 关键：流式调用
+            await foreach (var chunk in _chatService.GetStreamingChatMessageContentsAsync(history))
+            {
+                var content = chunk.Content;
+                _logger.LogDebug("Chunk: {Chunk}", content);
+                if (!string.IsNullOrEmpty(content))
+                {
+                    yield return content;
+                }
+            }
+        }
     }
 }

@@ -32,5 +32,16 @@ namespace AIRagChat.Controllers
             var result = await _ai.AskAsync(req.userId, req.Message);
             return Ok(result);
         }
+
+        [HttpGet("chatstream")]
+        public async Task ChatStream(string userId, string message)
+        {
+            Response.Headers.Append("Content-Type", "text/event-stream");
+            await foreach (var chunk in _ai.AskStreamAsync(userId, message))
+            {
+                await Response.WriteAsync($"data: {chunk}\n\n");
+                await Response.Body.FlushAsync();
+            }
+        }
     }
 }

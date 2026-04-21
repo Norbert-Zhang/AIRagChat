@@ -83,5 +83,43 @@ namespace AIRagChat.Services
 
             return response;
         }
+
+        public async IAsyncEnumerable<string> AskStreamAsync(string userId, string question)
+        {
+            // 1️⃣ 记忆
+            var history = await _memory.GetHistoryAsync(userId);
+
+            // 2️⃣ RAG
+            var docs = await _rag.SearchAsync(question);
+            var context = string.Join("\n", docs);
+
+            var systemPrompt = $@"你是企业AI助手，知识库内容： {context} 规则：- 优先使用知识库";
+
+            var messages = new List<Message>
+            {
+                new Message { Role = "system", Content = systemPrompt }
+            };
+            messages.AddRange(history);
+            messages.Add(new Message { Role = "user", Content = question });
+
+            // 👉 拼完整Prompt（用于日志）
+            var fullPrompt = string.Join("\n", messages.Select(m => $"{m.Role}: {m.Content}"));
+
+            var fullResponse = new System.Text.StringBuilder();
+
+            await foreach (var chunk in _ai.ChatStreamAsync(userId, messages))
+            {
+                fullResponse.Append(chunk);
+                yield return chunk;
+            }
+
+
+            // ⭐⭐⭐ 记录日志（关键）
+            await _log.LogAsync(userId, fullPrompt, fullResponse.ToString());
+
+            // 保存记忆
+            await _memory.SaveMessageAsync(userId, "user", question);
+            await _memory.SaveMessageAsync(userId, "assistant", fullResponse.ToString());
+        }
     }
 }
